@@ -6,7 +6,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
-st.set_page_config(page_title="Global Budget Analytics Core", layout="wide")
+st.set_page_config(page_title="Global Budget Analysis", layout="wide")
+
 
 
 def get_engine():
@@ -16,7 +17,7 @@ def get_engine():
     )
 
 
-st.title("🌍 Global Government Budget Analytics Core")
+st.title("🌍 Global Government Budget Analysis")
 st.markdown("An interactive platform exploring public finance shifts, sector dominance, and predictive trajectories.")
 
 # SIDEBAR REGIONAL FILTERS
