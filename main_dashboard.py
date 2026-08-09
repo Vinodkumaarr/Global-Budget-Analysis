@@ -1134,19 +1134,11 @@ with tab_sectors:
 
 with tab_anomalies:
 
-    st.markdown(
-        '<div class="section-title">'
-        'Descriptive Outlier Detection'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    st.subheader("🔍 Descriptive Outlier Detection")
 
-    st.markdown(
-        '<div class="section-description">'
-        'Identify fiscal years where government spending moved '
-        'significantly outside historical patterns.'
-        '</div>',
-        unsafe_allow_html=True
+    st.caption(
+        "Identify fiscal years where government spending "
+        "moved significantly outside historical patterns."
     )
 
     if not df_macro.empty:
@@ -1172,53 +1164,41 @@ with tab_anomalies:
                 df_anomaly["z_score"].abs() > 1.96
             ]
 
+            # -----------------------------------------
+            # KPI CARDS
+            # -----------------------------------------
+
             col_a1, col_a2 = st.columns(2)
 
             with col_a1:
 
-                st.markdown(
-                    f"""
-                    <div class="kpi-card">
-
-                        <div class="kpi-label">
-                            Mean Budget
-                        </div>
-
-                        <div class="kpi-value">
-                            ${mean_val:,.2f}B
-                        </div>
-
-                    </div>
-                    """,
-                    unsafe_allow_html=True
+                st.metric(
+                    label="Mean Budget",
+                    value=f"${mean_val:,.2f}B"
                 )
 
             with col_a2:
 
-                st.markdown(
-                    f"""
-                    <div class="kpi-card">
-
-                        <div class="kpi-label">
-                            Detected Outliers
-                        </div>
-
-                        <div class="kpi-value">
-                            {len(anomalies)}
-                        </div>
-
-                    </div>
-                    """,
-                    unsafe_allow_html=True
+                st.metric(
+                    label="Detected Outliers",
+                    value=str(len(anomalies))
                 )
 
-            st.markdown("### 🚨 Flagged Fiscal Outlier Periods")
+            st.markdown("---")
+
+            # -----------------------------------------
+            # OUTLIER TABLE
+            # -----------------------------------------
+
+            st.subheader(
+                "🚨 Flagged Fiscal Outlier Periods"
+            )
 
             if not anomalies.empty:
 
                 st.dataframe(
                     anomalies,
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True
                 )
 
