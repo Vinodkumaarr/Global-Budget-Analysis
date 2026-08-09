@@ -11,10 +11,28 @@ st.set_page_config(page_title="Global Budget Analysis", layout="wide")
 
 
 def get_engine():
-    password_quoted = urllib.parse.quote_plus("msvinod3827#")
+    # Reads from .streamlit/secrets.toml locally, or from Streamlit Cloud's
+    # Secrets manager when deployed. Falls back to local defaults if no
+    # secrets file is found at all (useful for quick local testing) —
+    # accessing st.secrets raises an error when no secrets.toml exists,
+    # so we guard the whole block with try/except.
+    try:
+        db_user = st.secrets.get("DB_USER", "root")
+        db_password = st.secrets.get("DB_PASSWORD", "1243")
+        db_host = st.secrets.get("DB_HOST", "localhost")
+        db_port = st.secrets.get("DB_PORT", "3306")
+        db_name = st.secrets.get("DB_NAME", "global_budget_db")
+    except Exception:
+        db_user = "root"
+        db_password = "1243"
+        db_host = "localhost"
+        db_port = "3306"
+        db_name = "global_budget_db"
+
+    password_quoted = urllib.parse.quote_plus(db_password)
     return create_engine(
-        f"mysql+mysqlconnector://root:{password_quoted}@localhost/global_budget_db"
-    )
+        f"mysql+mysqlconnector://{db_user}:{password_quoted}@{db_host}:{db_port}/{db_name}"
+)
 
 
 st.title("🌍 Global Government Budget Analysis")
@@ -188,3 +206,4 @@ with tab_research_lab:
             st.dataframe(df_proj_out.style.format({'projected_budget': '${:,.2f}'}), width='stretch')
         else:
             st.warning("Not enough historical points for the selected polynomial degree.")
+
