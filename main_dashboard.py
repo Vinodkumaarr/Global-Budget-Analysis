@@ -215,6 +215,7 @@ import urllib.parse
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+import textwrap
 
 # ============================================================
 # PAGE CONFIG
@@ -651,6 +652,9 @@ hr {
 </style>
 """, unsafe_allow_html=True)
 
+def render_html(html):
+    st.html(textwrap.dedent(html).strip())
+
 
 # ============================================================
 # DATABASE CONNECTION
@@ -743,7 +747,7 @@ def apply_plotly_theme(fig):
 # HERO
 # ============================================================
 
-st.markdown("""
+render_html("""
 <div class="hero">
 
     <h1>🌍 Global Government Budget Intelligence</h1>
@@ -756,8 +760,7 @@ st.markdown("""
     </p>
 
 </div>
-""", unsafe_allow_html=True)
-
+""")
 
 # ============================================================
 # SIDEBAR
@@ -765,17 +768,17 @@ st.markdown("""
 
 with st.sidebar:
 
-    st.markdown(
-        '<div class="sidebar-title">Global Budget</div>',
-        unsafe_allow_html=True
-    )
+    render_html("""
+    <div class="sidebar-title">
+       Global Budget
+    </div>
+    """)
 
-    st.markdown(
-        '<div class="sidebar-subtitle">'
-        'Fiscal intelligence & analytics platform'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    render_html("""
+    <div class="sidebar-subtitle">
+       Fiscal intelligence & analytics platform
+    </div>
+    """)
 
     st.markdown("### 🌎 Regional Filter")
 
@@ -873,40 +876,62 @@ if not df_macro.empty:
     )
 
     st.markdown(
-        '<div class="section-description">'
-        f'Current analytical overview for <b>{selected_country}</b>'
-        '</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
         f"""
-        <div class="kpi-container">
-
-            <div class="kpi-card">
-                <div class="kpi-label">Latest Budget</div>
-                <div class="kpi-value">${latest_budget:,.2f}B</div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-label">Peak Budget</div>
-                <div class="kpi-value">${highest_budget:,.2f}B</div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-label">Average Budget</div>
-                <div class="kpi-value">${average_budget:,.2f}B</div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-label">Latest Fiscal Year</div>
-                <div class="kpi-value">{latest_year}</div>
-            </div>
-
+        <div class="section-description">
+            Current analytical overview for {selected_country}
         </div>
         """,
         unsafe_allow_html=True
     )
+
+    render_html(f"""
+    <div class="kpi-container">
+
+        <div class="kpi-card">
+            <div class="kpi-label">
+                Latest Budget
+            </div>
+
+            <div class="kpi-value">
+                ${latest_budget:,.2f}B
+            </div>
+        </div>
+
+
+        <div class="kpi-card">
+            <div class="kpi-label">
+                Peak Budget
+            </div>
+
+            <div class="kpi-value">
+                ${highest_budget:,.2f}B
+            </div>
+        </div>
+
+
+        <div class="kpi-card">
+            <div class="kpi-label">
+                Average Budget
+            </div>
+
+            <div class="kpi-value">
+                ${average_budget:,.2f}B
+            </div>
+        </div>
+
+
+        <div class="kpi-card">
+            <div class="kpi-label">
+                Latest Fiscal Year
+            </div>
+
+            <div class="kpi-value">
+                {latest_year}
+            </div>
+        </div>
+
+    </div>
+    """)
 
 
 # ============================================================
